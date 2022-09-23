@@ -1,7 +1,7 @@
 CREATE SCHEMA IF NOT EXISTS tbl_ordemservico DEFAULT CHARACTER SET latin1 ;
 USE tbl_ordemservico ;
 
-CREATE TABLE IF NOT EXISTS tbl_ordemservico.cliente (
+CREATE TABLE IF NOT EXISTS cliente (
   id_cliente INT(11) NOT NULL AUTO_INCREMENT,
   nome VARCHAR(60) NOT NULL,
   cpf_ou_cnpj VARCHAR(14) NOT NULL,
@@ -11,14 +11,14 @@ CREATE TABLE IF NOT EXISTS tbl_ordemservico.cliente (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-CREATE TABLE IF NOT EXISTS tbl_ordemservico.estoque (
+CREATE TABLE IF NOT EXISTS estoque (
   id_estoque INT(11) NOT NULL AUTO_INCREMENT,
   localizacao VARCHAR(45) NOT NULL,
   PRIMARY KEY (id_estoque))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-CREATE TABLE IF NOT EXISTS tbl_ordemservico.produto (
+CREATE TABLE IF NOT EXISTS produto (
   id_produto INT(11) NOT NULL AUTO_INCREMENT,
   categoria VARCHAR(45) NOT NULL,
   descricao VARCHAR(45) NULL DEFAULT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS tbl_ordemservico.produto (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-CREATE TABLE IF NOT EXISTS tbl_ordemservico.estoque_do_produto (
+CREATE TABLE IF NOT EXISTS estoque_do_produto (
   id_estoque INT(11) NOT NULL AUTO_INCREMENT,
   id_produto INT(11) NOT NULL,
   quantidade INT(11) NOT NULL,
@@ -36,18 +36,18 @@ CREATE TABLE IF NOT EXISTS tbl_ordemservico.estoque_do_produto (
   INDEX fk_estoque_has_produto_estoque1_idx (id_estoque ASC),
   CONSTRAINT fk_estoque_has_produto_estoque1
     FOREIGN KEY (id_estoque)
-    REFERENCES tbl_ordemservico.estoque (id_estoque)
+    REFERENCES estoque (id_estoque)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT fk_estoque_has_produto_produto1
     FOREIGN KEY (id_produto)
-    REFERENCES tbl_ordemservico.produto (id_produto)
+    REFERENCES produto (id_produto)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-CREATE TABLE IF NOT EXISTS tbl_ordemservico.fornecedor (
+CREATE TABLE IF NOT EXISTS fornecedor (
   id_fornecedor INT(11) NOT NULL AUTO_INCREMENT,
   razao_social VARCHAR(45) NOT NULL,
   nome_popular VARCHAR(30) NULL DEFAULT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS tbl_ordemservico.fornecedor (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-CREATE TABLE IF NOT EXISTS tbl_ordemservico.pedido (
+CREATE TABLE IF NOT EXISTS pedido (
   id_pedido INT(11) NOT NULL AUTO_INCREMENT,
   status VARCHAR(12) NOT NULL,
   descricao VARCHAR(45) NULL DEFAULT NULL,
@@ -73,13 +73,13 @@ CREATE TABLE IF NOT EXISTS tbl_ordemservico.pedido (
   INDEX fk_pedido_cliente_idx (id_cliente ASC),
   CONSTRAINT fk_pedido_cliente
     FOREIGN KEY (id_cliente)
-    REFERENCES tbl_ordemservico.cliente (id_cliente)
+    REFERENCES cliente (id_cliente)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-CREATE TABLE IF NOT EXISTS tbl_ordemservico.pagamento (
+CREATE TABLE IF NOT EXISTS pagamento (
   id_pagamento INT(11) NOT NULL AUTO_INCREMENT,
   id_pedido INT(11) NOT NULL,
   tipo_pagamento VARCHAR(10) NOT NULL,
@@ -91,13 +91,13 @@ CREATE TABLE IF NOT EXISTS tbl_ordemservico.pagamento (
   INDEX fk_pagamento_pedido1_idx (id_pedido ASC),
   CONSTRAINT fk_pagamento_pedido1
     FOREIGN KEY (id_pedido)
-    REFERENCES tbl_ordemservico.pedido (id_pedido)
+    REFERENCES pedido (id_pedido)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-CREATE TABLE IF NOT EXISTS tbl_ordemservico.pedido_do_produto (
+CREATE TABLE IF NOT EXISTS pedido_do_produto (
   id_pedido INT(11) NOT NULL AUTO_INCREMENT,
   id_produto INT(11) NOT NULL,
   quantidade INT(11) NOT NULL,
@@ -106,18 +106,18 @@ CREATE TABLE IF NOT EXISTS tbl_ordemservico.pedido_do_produto (
   INDEX fk_pedido_has_produto_pedido1_idx (id_pedido ASC),
   CONSTRAINT fk_pedido_has_produto_pedido1
     FOREIGN KEY (id_pedido)
-    REFERENCES tbl_ordemservico.pedido (id_pedido)
+    REFERENCES pedido (id_pedido)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT fk_pedido_has_produto_produto1
     FOREIGN KEY (id_produto)
-    REFERENCES tbl_ordemservico.produto (id_produto)
+    REFERENCES produto (id_produto)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-CREATE TABLE IF NOT EXISTS tbl_ordemservico.produto_do_fornecedor (
+CREATE TABLE IF NOT EXISTS produto_do_fornecedor (
   id_produto INT(11) NOT NULL AUTO_INCREMENT,
   id_fornecedor INT(11) NOT NULL,
   PRIMARY KEY (id_produto, id_fornecedor),
@@ -125,18 +125,18 @@ CREATE TABLE IF NOT EXISTS tbl_ordemservico.produto_do_fornecedor (
   INDEX fk_has_produto1_idx (id_produto ASC),
   CONSTRAINT fk_has_fornecedor1
     FOREIGN KEY (id_fornecedor)
-    REFERENCES tbl_ordemservico.fornecedor (id_fornecedor)
+    REFERENCES fornecedor (id_fornecedor)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT fk_has_produto1
     FOREIGN KEY (id_produto)
-    REFERENCES tbl_ordemservico.produto (id_produto)
+    REFERENCES produto (id_produto)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-CREATE TABLE IF NOT EXISTS tbl_ordemservico.terceiro (
+CREATE TABLE IF NOT EXISTS terceiro (
   id_terceiro INT(11) NOT NULL AUTO_INCREMENT,
   razao_social VARCHAR(45) NOT NULL,
   cnpj VARCHAR(14) NOT NULL,
@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS tbl_ordemservico.terceiro (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-CREATE TABLE IF NOT EXISTS tbl_ordemservico.produto_do_terceiro (
+CREATE TABLE IF NOT EXISTS produto_do_terceiro (
   produto_id_produto INT(11) NOT NULL,
   terceiro_id_terceiro INT(11) NOT NULL,
   quantidade INT NOT NULL,
@@ -155,12 +155,12 @@ CREATE TABLE IF NOT EXISTS tbl_ordemservico.produto_do_terceiro (
   INDEX fk_produto_has_terceiro_produto1_idx (produto_id_produto ASC),
   CONSTRAINT fk_produto_has_terceiro_produto1
     FOREIGN KEY (produto_id_produto)
-    REFERENCES tbl_ordemservico.produto (id_produto)
+    REFERENCES produto (id_produto)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT fk_produto_has_terceiro_terceiro1
     FOREIGN KEY (terceiro_id_terceiro)
-    REFERENCES tbl_ordemservico.terceiro (id_terceiro)
+    REFERENCES terceiro (id_terceiro)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -168,32 +168,32 @@ DEFAULT CHARACTER SET = latin1;
 
 
 # INSERTS TESTE
-INSERT INTO cliente VALUES
+INSERT INTO cliente (nome, cpf_ou_cnpj, endereco) VALUES
  ('João', '44455566677', 'Rua Morais, 93 - Bauru, Santos'),
  ('RobertoTec', '33111333000101', 'Rua Treze, 13 - Casqueiro, Cubatao'),
  ('Maria do Carmo', '78945612345', 'Rua Dalmatas, 101 - Bauru, Santos'),
  ('Coca-Mola', '88777222000105', 'Av Teclado, 44 - Bauru, Santos')
 ;
 
-INSERT INTO estoque  VALUES
+INSERT INTO estoque (localizacao) VALUES
  ('Santos'), ('Bertioga'), ('Cubatão')
 ;
 
-INSERT INTO fornecedor VALUES
+INSERT INTO fornecedor (razao_social, nome_popular, cnpj, endereco) VALUES
  ('Pao-De-Forma Ltda', 'Paozinho de Forma', '11222111000101', 'Av Eng Luiz, 45 - Cartola, São Paulo'),
  ('Rubinho SA', 'Rubinho Coxinhas', '99222111000101', 'Rua do Pulo, 3 - Cartola, Jundiaí'),
  ('Treze Pasteis', 'Treze Pasteis', '44222111000101', 'Av Zebra, 562 - Potiguar, Praia Grande')
 ;
 
-INSERT INTO produto VALUES
+INSERT INTO produto (categoria, descricao, valor) VALUES
  ('Alimentos', 'Massa de pastel 1kg', 10.5),
  ('Alimentos', 'Arroz Pardo 1kg', 4.3),
  ('Alimentos', 'Pão de Forma 400g', 3.4)
 ;
 
-INSERT INTO terceiro VALUES
- (1,'Zero Dez Alimentos','44555777000155','Rua V, 45 - Centro, Rio de Janeiro'),
- (2,'Maria Lanches','88999444000211','Rua X, 56 - Centro, Santos')
+INSERT INTO terceiro (razao_social, cnpj, endereco) VALUES
+ ('Zero Dez Alimentos','44555777000155','Rua V, 45 - Centro, Rio de Janeiro'),
+ ('Maria Lanches','88999444000211','Rua X, 56 - Centro, Santos')
 ;
 
 INSERT INTO estoque_do_produto (id_estoque, id_produto, quantidade) VALUES
@@ -236,4 +236,3 @@ INSERT INTO pedido_do_produto VALUES
 ;
 
 # SELECTS
-
