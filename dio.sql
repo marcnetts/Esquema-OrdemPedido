@@ -236,3 +236,17 @@ INSERT INTO pedido_do_produto VALUES
 ;
 
 # SELECTS
+#Todos pedidos
+SELECT * FROM pedido;
+#Todas parcelas de pedidos, pagos ou não
+SELECT * FROM pagamento;
+#Pagamentos realizados até 31/10/2022
+SELECT * FROM pagamento WHERE pago_em <= '2022-10-31' AND pago_em IS NOT NULL;
+#Vencimento de pagamentos futuros em dias
+SELECT id_pagamento, id_pedido, DATEDIFF(NOW(), vencimento) as vencimento_em_dias, valor FROM pagamento WHERE pago_em IS NOT NULL and DATEDIFF(NOW(), vencimento) > 0;
+#Fornecedores por razão social (alfabética)
+SELECT * FROM fornecedor ORDER BY razao_social;
+#Pedidos acima de $350, considerando todas suas parcelas
+SELECT id_pedido, sum(valor) total FROM pagamento GROUP BY id_pedido HAVING total > 350;
+#Nome do cliente com endereço e status de seu pedido
+SELECT pedido.id_pedido, cliente.nome nome_cliente, pedido.endereco, pedido.status FROM pedido INNER JOIN cliente ON cliente.id_cliente = pedido.id_cliente;
